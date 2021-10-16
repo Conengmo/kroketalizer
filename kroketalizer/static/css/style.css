@@ -1,0 +1,25 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 80px;
+  background-color: #fffcfc;
+}
+main {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 80px;
+  line-height: 80px; /* Vertically center the text there */
+  background-color: #f5f5f5;
+}
+.jumbotron {
+    background-color: #fffcfc;
+}
