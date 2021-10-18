@@ -16,17 +16,21 @@ def convert(value: Union[str, dict, list, tuple]) -> Union[str, dict, list, tupl
 
 
 def _convert_string(text: str) -> str:
+    if text.endswith(('.jpg', '.mp4')):
+        return text
     text = _convert_to_kroket(text)
     text = _replace_article_words(text)
     return text
 
 
 def _convert_to_kroket(text: str) -> str:
-    text = re.sub(r'Concertgebouw', 'Kroketgebouw', text)
-    text = re.sub(r'Concerten', 'Kroketten', text)
-    text = re.sub(r'concerten', 'kroketten', text)
-    text = re.sub(r'Concert', 'Kroket', text)
-    text = re.sub(r'concert', 'kroket', text)
+    text = text.replace(r'Concertgebouw', 'Kroketgebouw')
+    text = text.replace(r'Concerten', 'Kroketten')
+    text = text.replace(r'concerten', 'kroketten')
+    text = text.replace(r'Concert', 'Kroket')
+    text = text.replace(r'concert', 'kroket')
+
+    text = re.sub(r'\bklinkt\b', 'smaakt', text)
     return text
 
 

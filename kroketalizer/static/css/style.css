@@ -5,7 +5,15 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 80px;
-  background-color: #fffcfc;
+  background-color: #fcfcfc;
+}
+.navbar {
+    height: 120px;
+    opacity: 0.5;
+}
+.navbar a {
+    color: #FFF;
+    text-decoration: none;
 }
 main {
     padding-top: 3rem;

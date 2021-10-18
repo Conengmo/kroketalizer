@@ -19,20 +19,18 @@
 
 
 <header>
-    <div class="navbar navbar-expand-md bg-white border-bottom shadow-sm">
+    <div class="navbar navbar-expand-md bg-dark border-bottom border-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand text-dark" href="/">HET<br/>KROKET<br/>GEBOUW</a>
+            <a class="" href="/">HET<br/>KROKET<br/>GEBOUW</a>
             <nav>
-                <a class="p-2 text-dark" href="/">Home</a>
+                <a class="p-2" href="/">Home</a>
             </nav>
         </div>
     </div>
 </header>
 
 
-<main role="main" class="container">
-    {% block content %}{% endblock %}
-</main>
+{% block content %}{% endblock %}
 
 
 <footer class="footer">
@@ -43,5 +41,7 @@
 
 
 </body>
+
+{% block script %}{% endblock %}
 
 </html>
