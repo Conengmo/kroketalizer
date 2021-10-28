@@ -28,7 +28,7 @@ def index():
     }
 
     content = []
-    images = os.listdir('kroketalizer/static/img/')
+    images = [fn for fn in os.listdir('kroketalizer/static/img/') if fn.endswith('.jpg')]
     random.shuffle(images)
     for block in r.css('.infoblock'):
         header = block.css('.infoblock__content__header::text').get()
@@ -39,7 +39,7 @@ def index():
 
     context = convert(context)
 
-    context['videos'] = os.listdir('kroketalizer/static/video/')
+    context['videos'] = [fn for fn in os.listdir('kroketalizer/static/video/') if fn.endswith('.mp4')]
     random.shuffle(context['videos'])
 
     return render_template('index.html', **context)
