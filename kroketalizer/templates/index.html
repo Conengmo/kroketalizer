@@ -2,12 +2,50 @@
 {% extends "base.html" %}
 
 
+{% block style %}
+  <style>
+      input#muteButton {
+          display: none;
+      }
+      .mute img {
+          display: none;
+      }
+      input#muteButton:checked ~ .mute img {
+          display: initial;
+      }
+      input#muteButton:checked ~ .unmute img {
+          display: none;
+      }
+
+      .mute-button {
+          position:relative;
+          top: -60px;
+          float: right;
+          right: 50px;
+      }
+      .mute-button img {
+          width: 30px;
+          height: 30px;
+      }
+
+  </style>
+{% endblock style %}
+
+
 {% block content %}
 
   <div style="height: 500px; margin-top:-120px;  z-index:-1">
     <video id="jumbotronVideo" autoplay muted width="100%" height='500px' style="object-fit: cover;"
            src="/static/video/{{ videos.0 }}">
     </video>
+
+    <input type="checkbox" id="muteButton">
+    <label for="muteButton" class="mute-button unmute">
+      <img src="/static/icons/mute.svg" alt="play music">
+    </label>
+    <label for="muteButton" class="mute-button mute">
+      <img src="/static/icons/speaker.svg" alt="stop music">
+    </label>
 
     <div style="position: relative;top: -350px;color: white;">
       <div class="container py-5">
@@ -43,6 +81,7 @@
 
 
 {% block script %}
+
   <script>
       const videoElement = document.getElementById("jumbotronVideo");
 
@@ -59,6 +98,17 @@
           videoElement.load();
           videoElement.play();
       });
+
+      let music = new Audio('/static/audio/carl_filtsch_romance_op_3_no_1.mp3');
+      music.loop = true;
+
+      document.getElementById('muteButton').onclick = function() {
+          if (music.paused) {
+              music.play();
+          } else {
+              music.pause();
+          }
+      };
 
   </script>
 
