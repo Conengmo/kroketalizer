@@ -1,27 +1,17 @@
 import os.path
 import random
-
-import requests
 from flask import render_template
 from scrapy.http import HtmlResponse
 
 from . import app
+from .cache import get_body_from_cache
 from .converter import convert
 
 
 @app.route("/")
 def index():
-    url = 'https://www.concertgebouw.nl/'
-    if not os.path.exists('dump.html'):
-        resp = requests.get(url)
-        resp.raise_for_status()
-        with open('dump.html', 'w') as f:
-            f.write(resp.text)
-        body: bytes = resp.content
-    else:
-        with open('dump.html', 'rb') as f:
-            body = f.read()
-    r = HtmlResponse(url, body=body)
+    body = get_body_from_cache()
+    r = HtmlResponse('', body=body)
     context = {
         'jumbotron_title': r.css('h1::text').get(),
         'jumbotron_text': r.css('h2::text').get(),
@@ -43,3 +33,8 @@ def index():
     random.shuffle(context['videos'])
 
     return render_template('index.html', **context)
+
+
+@app.route('/colofon')
+def colofon():
+    return render_template('colofon.html')

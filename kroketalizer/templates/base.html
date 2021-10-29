@@ -20,11 +20,13 @@
 
 
 <header>
-    <div class="navbar navbar-expand-md bg-dark border-bottom border-dark shadow-sm">
+    <div class="navbar navbar-expand-md border-bottom border-dark shadow-sm">
         <div class="container">
-            <a class="" href="/">HET<br/>KROKET<br/>GEBOUW</a>
+            <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="80px" height="80px" />
+            <a class="fs-5 ms-3" href="/">
+              HET<br/>KROKET<br/>GEBOUW</a>
             <nav>
-                <a class="p-2" href="/">Home</a>
+                <a class="p-2" href="/" style="display:none;">Home</a>
             </nav>
         </div>
     </div>
@@ -36,7 +38,7 @@
 
 <footer class="footer">
     <div class="container text-center">
-        Hi
+      <a href="{{ url_for('colofon') }}">colofon</a>
     </div>
 </footer>
 

@@ -1,4 +1,5 @@
 import re
+from string import ascii_lowercase
 from typing import Union
 
 
@@ -8,9 +9,11 @@ def convert(value: Union[str, dict, list, tuple]) -> Union[str, dict, list, tupl
     elif isinstance(value, dict):
         return {_convert_string(key): convert(_value) for key, _value in value.items()}
     elif isinstance(value, list):
-        return [convert(_value) for _value in value]
+        lst = [convert(_value) for _value in value]
+        return [x for x in lst if x]
     elif isinstance(value, tuple):
-        return tuple(convert(_value) for _value in value)
+        x = tuple(convert(_value) for _value in value)
+        return x if all(x) else tuple()
     else:
         raise ValueError(f'Unknown type: {type(value)}')
 
@@ -18,52 +21,90 @@ def convert(value: Union[str, dict, list, tuple]) -> Union[str, dict, list, tupl
 def _convert_string(text: str) -> str:
     if text.endswith(('.jpg', '.mp4')):
         return text
+    text = _skip_blocklist_entries(text)
     text = _convert_to_kroket(text)
     text = _replace_article_words(text)
+    text = text.replace("'S", "'s")
     return text
+
+
+conversions = {
+    'concertgebouw': 'kroketgebouw',
+    'concerten': 'kroketten',
+    'concert': 'concert',
+    'klinkt': 'smaakt',
+    'mooier': 'beter',
+    'dirigent': 'kok',
+    'series': 'voordeelmenu\'s',
+    'programmering': 'menu',
+    'philharmonisch': 'filet americain',
+    'orkest': 'broodje',
+    'vriendenloterij': 'gezinszak',
+}
 
 
 def _convert_to_kroket(text: str) -> str:
-    text = text.replace(r'Concertgebouw', 'Kroketgebouw')
-    text = text.replace(r'Concerten', 'Kroketten')
-    text = text.replace(r'concerten', 'kroketten')
-    text = text.replace(r'Concert', 'Kroket')
-    text = text.replace(r'concert', 'kroket')
-
-    text = re.sub(r'\bklinkt\b', 'smaakt', text)
+    for pattern, repl in conversions.items():
+        text = _replace(pattern, repl, text)
     return text
+
+
+blocklist = [
+    'condoleance',
+]
+
+
+def _skip_blocklist_entries(text: str) -> str:
+    _text = text.lower()
+    return '' if any(phrase in _text for phrase in blocklist) else text
+
+
+def _replace(pattern, repl, text) -> str:
+    for match in list(re.finditer(_re_phrase(pattern), text, re.I))[::-1]:
+        is_capital = match[0][0].isupper()
+        is_title = match[0].istitle()
+        if is_title:
+            repl = repl.title()
+        elif is_capital:
+            repl = repl.capitalize()
+        span = match.span()
+        text = text[:span[0]] + repl + text[span[1]:]
+    return text
+
+
+article_replacements = [
+    ('het', 'de', 'kroket'),
+    ('de', 'het', 'menu'),
+]
 
 
 def _replace_article_words(text: str) -> str:
     """Replace wrong article words with correct versions."""
-    article_org = 'het'
-    len_article_org = 3
-    article_new = 'de'
-    keyword = 'kroket '
-    len_keyword = 6  # kroket without the trailing space
-    prev_ind = -1
-    while True:
-        b = text.lower()
-        ind = b.find(keyword, prev_ind + 1)
-        if ind == -1:
-            break
-        prev_ind = ind
-        # Check if the word is not located in an html tag
-        flg_skip = False
-        for char in b[ind:ind - 300:-1]:
-            if char == '>':
-                break
-            elif char == '<':
-                flg_skip = True
-        if flg_skip:
+    for article_org, article_new, keyword in article_replacements:
+        text = _replace_article_word(text, article_org, article_new, keyword)
+    return text
+
+
+def _replace_article_word(text: str, article_org: str, article_new: str, keyword: str) -> str:
+    len_article_org = len(article_org)
+    for match in re.finditer(_re_phrase(keyword), text, re.I):
+        ind = match.span()[0]
+        match_article = re.search(_re_phrase(article_org[::-1]), text[ind - 200:ind][::-1], re.I)
+        if not match_article:
             continue
-        ind_article = b.rfind(article_org, ind - 200, ind)
-        if ind_article == -1:
-            continue
+        ind_article = ind - match_article.span()[1]
         article_new_cap = article_new.capitalize() if text[ind_article].isupper() else article_new
-        # fill = u'Replacing \'{}\' with \'{}{}\'.'
-        # print(fill.format(text[ind_article:ind + len_keyword],
-        #                   article_new_cap,
-        #                   text[ind_article + len_article_org:ind + len_keyword]))
         text = text[:ind_article] + article_new_cap + text[ind_article + len_article_org:]
     return text
+
+
+def _is_word(text: str, ind_start: int, ind_end: int):
+    if ind_start > 0 and text[ind_start - 1] in ascii_lowercase:
+        return False
+    if ind_end < len(text) and text[ind_end] in ascii_lowercase:
+        return False
+    return True
+
+
+def _re_phrase(phrase: str) -> str:
+    return rf'\b{re.escape(phrase)}(?=([\s\t,._-])|$)'
