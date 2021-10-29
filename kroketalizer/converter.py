@@ -1,3 +1,4 @@
+import random
 import re
 from string import ascii_lowercase
 from typing import Union
@@ -35,17 +36,19 @@ conversions = {
     'klinkt': 'smaakt',
     'mooier': 'beter',
     'dirigent': 'kok',
-    'series': 'voordeelmenu\'s',
+    'series': ['voordeelmenu\'s', 'combodeal\'s'],
     'programmering': 'menu',
-    'philharmonisch': 'filet americain',
-    'orkest': 'broodje',
+    'philharmonisch orkest': ['filet americain', 'filodeeg bockworst', 'filet souflesse'],
     'vriendenloterij': 'gezinszak',
 }
 
 
 def _convert_to_kroket(text: str) -> str:
     for pattern, repl in conversions.items():
+        if isinstance(repl, list):
+            repl = random.sample(repl, 1)[0]
         text = _replace(pattern, repl, text)
+    text = re.sub(rf'\bcorona', 'vogelgriep', text)
     return text
 
 
