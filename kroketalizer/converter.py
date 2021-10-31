@@ -29,10 +29,8 @@ def _convert_string(text: str) -> str:
     return text
 
 
-conversions = {
+conversions_phrase = {
     'concertgebouw': 'kroketgebouw',
-    'concerten': 'kroketten',
-    'concert': 'concert',
     'klinkt': 'smaakt',
     'mooier': 'beter',
     'dirigent': 'kok',
@@ -43,12 +41,20 @@ conversions = {
 }
 
 
+conversions_partial = {
+    'concerten': 'kroketten',
+    'concert': 'kroket',
+    'corona': 'vogelgriep',
+}
+
+
 def _convert_to_kroket(text: str) -> str:
-    for pattern, repl in conversions.items():
+    for pattern, repl in conversions_phrase.items():
         if isinstance(repl, list):
             repl = random.sample(repl, 1)[0]
-        text = _replace(pattern, repl, text)
-    text = re.sub(rf'\bcorona', 'vogelgriep', text)
+        text = _replace(_re_phrase(pattern), repl, text)
+    for pattern, repl in conversions_partial.items():
+        text = _replace(re.escape(pattern), repl, text)
     return text
 
 
@@ -62,8 +68,8 @@ def _skip_blocklist_entries(text: str) -> str:
     return '' if any(phrase in _text for phrase in blocklist) else text
 
 
-def _replace(pattern, repl, text) -> str:
-    for match in list(re.finditer(_re_phrase(pattern), text, re.I))[::-1]:
+def _replace(pattern: str, repl: str, text: str) -> str:
+    for match in list(re.finditer(pattern, text, re.I))[::-1]:
         is_capital = match[0][0].isupper()
         is_title = match[0].istitle()
         if is_title:
