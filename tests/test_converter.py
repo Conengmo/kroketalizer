@@ -1,6 +1,11 @@
+import random
+import re
+
 import pytest
 
-from kroketalizer.converter import _is_word, _replace_article_word
+from kroketalizer.converter import (_convert_names, _convert_string,
+                                    _convert_to_kroket, _is_word,
+                                    _replace_article_word, names)
 
 
 @pytest.mark.parametrize("text, article_org, article_new, keyword, expected", [
@@ -21,3 +26,39 @@ def test_replace_article_word(text, article_org, article_new, keyword, expected)
 ])
 def test_is_word(text, ind_start, ind_end, expected):
     assert _is_word(text, ind_start, ind_end) == expected
+
+
+def _escape_names(text: str) -> str:
+    return re.sub(rf"\b({'|'.join(re.escape(name) for name in names)})\b", '$$$', text)
+
+
+@pytest.mark.parametrize("text, expected", [
+    ('hi Het Concertgebouw', 'hi Het Kroketgebouw'),
+    ('Grote Pianisten: Igor Levit speelt Schubert, Sjostakovitsj en Prokofjev',
+     'Grote Frietbakkers: Igor $$$ bakt $$$, $$$ en $$$'),
+    ('Kristiina Poska dirigeert Pärt en Sibelius', 'Kristiina $$$ frituurt $$$ en $$$'),
+])
+def test_convert_string(text, expected):
+    converted = _escape_names(_convert_string(text))
+    assert converted == expected
+
+
+@pytest.mark.parametrize("text, expected", [
+    ('hi Het Concertgebouw', 'hi Het Concertgebouw'),
+    ('Over het gebouw', 'Over het gebouw'),
+    ('Livestreams', 'Livestreams'),
+    ('hi Marcel Something hier', 'hi Marcel $$$ hier'),
+    ('Ferdinand Prokofiev Gerardus', 'Ferdinand $$$'),
+])
+def test_convert_names(text, expected):
+    converted = _escape_names(_convert_names(text))
+    assert converted == expected
+
+
+@pytest.mark.parametrize("text, expected", [
+    ('hi Het Concertgebouw', 'hi Het Kroketgebouw'),
+    ('Grote Pianisten:', 'Grote Frietbakkers:'),
+])
+def test_convert_to_kroket(text, expected):
+    assert _convert_to_kroket(text) == expected
+

@@ -21,6 +21,27 @@
           margin-left:  10px;
       }
 
+      .card-img-overlay h5, .card-img-overlay  p{
+          font-family: open-sans, sans-serif;
+      }
+      .darken-hover-background {
+          background-color: black;
+          height: 100%;
+          opacity: 0.2;
+      }
+      .darken-hover-background:hover {
+        opacity: 0.5;
+        transition: opacity .3s;
+      }
+      .card-img-overlay {
+          top: inherit;
+          padding: 1.2rem;
+      }
+      .card-img-overlay p {
+         text-transform: uppercase;
+      }
+
+
   </style>
 {% endblock style %}
 
@@ -53,8 +74,41 @@
 
   <main role="main" class="container">
 
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 mb-5">
+      {% for item in content_top %}
+        <div class="col">
+          <div class="card h-100">
+            <img src="/static/img/{{ item.2 }}" class="card-img-top"
+                 style="aspect-ratio: 16 / 9; object-fit: cover;">
+            <div class="card-body">
+              <h3 class="card-title">{{ item.0 }}</h3>
+              {% for paragraph in item.1 %}
+                <p class="card-text">{{ paragraph }}</p>
+              {% endfor%}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 mb-5">
+      {% for item in content_mid %}
+      <div class="col">
+        <div class="card text-white">
+          <img src="/static/img/{{ item.2 }}" class="card-img"
+               style="aspect-ratio: 0.94; object-fit: cover;">
+          <div class="card-img-overlay darken-hover-background"></div>
+          <div class="card-img-overlay">
+            <h5 class="card-title">{{ item.0 }}</h5>
+            <p class="card-text">{{ item.1 }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4">
-      {% for item in content %}
+      {% for item in content_bottom %}
         <div class="col">
           <div class="card h-100">
             <img src="/static/img/{{ item.2 }}" class="card-img-top"

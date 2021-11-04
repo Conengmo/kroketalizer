@@ -1,7 +1,7 @@
 import random
 import re
 from string import ascii_lowercase
-from typing import Union
+from typing import List, Union
 
 
 def convert(value: Union[str, dict, list, tuple]) -> Union[str, dict, list, tuple]:
@@ -23,10 +23,88 @@ def _convert_string(text: str) -> str:
     if text.endswith(('.jpg', '.mp4')):
         return text
     text = _skip_blocklist_entries(text)
+    text = _convert_names(text)
     text = _convert_to_kroket(text)
     text = _replace_article_words(text)
     text = text.replace("'S", "'s")
     return text
+
+
+names = [
+    'Appelflap',
+    'Berenklauw',
+    'Frikandel',
+    'Viandel',
+    'Kroket',
+    'Kwekkeboomkroket',
+    'Goulashkroket',
+    'Satekroket',
+    'Garnalenkroket',
+    'Groentenkroket',
+    'Kaaskroket',
+    'Bamischijf',
+    'Nasischijf',
+    'Gehaktbal',
+    'Gehaktstaaf',
+    'Hete Donder',
+    'Mexicano',
+    'Ribster',
+    'Zigeunerstick',
+    'Vlampijp',
+    'Kipkorn',
+    'Kipcrush',
+    'Grizly',
+    'Sitostick',
+    'Saterol',
+    'Sate',
+    'Shaslick',
+    'Smulrol',
+    'Shoarmarol',
+    'Braadworst',
+    'Ragoezie',
+    'Loempia',
+    'Visstick',
+    'Zeestick',
+    'Loempidel',
+    'Souflesse',
+    'Taco',
+    'Bonita',
+    'Bitterbal',
+    'Kipnugget',
+    'Kipfinger',
+    'Kipkrokantje',
+    'Chickenwing',
+    'Chickenstrip'
+    'Truffelkroket',
+    'Sparerib',
+    'Halve-haan',
+    'Schnitzel',
+    'Shoarmarol',
+    'Worstenbroodje',
+    'Knackworst',
+    'Bockworst',
+    'Curry',
+    'Joppiesaus',
+    'Mosterd',
+    'Appelmoes',
+    'Fritessaus',
+    'Puntbroodje',
+    'Ketchup',
+    'Piccalily',
+    'Knoflooksaus',
+    'Satesaus',
+    'Mayonaise',
+    'Milkshake',
+    'Softijs',
+    'Hamburger',
+    'Vegaburger',
+    'Remouladesaus',
+    'Kibbeling',
+    'Sundae',
+    'Uitsmijter',
+    'Ijststam',
+]
+names_lookup = {x[0]: x for x in names}
 
 
 conversions_phrase = {
@@ -38,6 +116,9 @@ conversions_phrase = {
     'programmering': 'menu',
     'philharmonisch orkest': ['filet americain', 'filodeeg bockworst', 'filet souflesse'],
     'vriendenloterij': 'gezinszak',
+    'dirigeert': 'frituurt',
+    'pianisten': 'frietbakkers',
+    'speelt': 'bakt',
 }
 
 
@@ -46,6 +127,45 @@ conversions_partial = {
     'concert': 'kroket',
     'corona': 'vogelgriep',
 }
+
+
+def _convert_names(text: str) -> str:
+    name_parts = []
+    new_text_parts = []
+    for i, word in enumerate(text.split()):
+        word_lower = word.lower().rstrip(',:')
+        if word.istitle() and (word_lower in conversions_phrase or any(x in word_lower for x in conversions_partial)):
+            new_text_parts.extend(name_parts)
+            name_parts = []
+            new_text_parts.append(word)
+            continue
+        if word.istitle():
+            name_parts.append(word)
+        elif name_parts and i == 1:
+            new_text_parts.extend(name_parts)
+            name_parts = []
+            new_text_parts.append(word)
+        elif name_parts and i > 1:
+            new_text_parts.append(_convert_names_sub(name_parts))
+            name_parts = []
+            new_text_parts.append(word)
+        else:
+            new_text_parts.append(word)
+        if name_parts and word.endswith((':', ',', '.')):
+            new_text_parts.append(_convert_names_sub(name_parts) + word[-1])
+            name_parts = []
+    if name_parts and i > 0:
+        new_text_parts.append(_convert_names_sub(name_parts))
+    else:
+        new_text_parts.extend(name_parts)
+    return ' '.join(new_text_parts)
+
+
+def _convert_names_sub(name_parts: List[str]) -> str:
+    if len(name_parts) == 1:
+        return random.sample(names, 1)[0]
+    else:
+        return name_parts[0] + ' ' + (names_lookup.get(name_parts[0][0]) or random.sample(names, 1)[0])
 
 
 def _convert_to_kroket(text: str) -> str:
@@ -116,4 +236,4 @@ def _is_word(text: str, ind_start: int, ind_end: int):
 
 
 def _re_phrase(phrase: str) -> str:
-    return rf'\b{re.escape(phrase)}(?=([\s\t,._-])|$)'
+    return rf'\b{re.escape(phrase)}(?=([\s\t:,._-])|$)'
