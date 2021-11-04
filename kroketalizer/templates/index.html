@@ -4,50 +4,21 @@
 
 {% block style %}
   <style>
-      input#muteButton {
-          display: none;
-      }
-      .mute img {
-          display: none;
-      }
-      input#muteButton:checked ~ .mute img {
-          display: initial;
-      }
-      input#muteButton:checked ~ .unmute img {
-          display: none;
-      }
-      .mute-button {
+      .media-button {
           position:relative;
           top: -60px;
           float: right;
           right: 50px;
       }
-      .mute-button img {
+      .sound-button {
           width: 30px;
           height: 30px;
       }
-
-      input#playButton {
-          display: none;
-      }
-      .pause img {
-          display: none;
-      }
-      input#playButton:checked ~ .pause img {
-          display: initial;
-      }
-      input#playButton:checked ~ .play img {
-          display: none;
-      }
-      .play-button {
-          position:relative;
-          top: -60px;
-          float: right;
-          right: 50px;
-      }
-      .play-button img {
+      .video-button {
           width: 25px;
           height: 25px;
+          margin-top: 2px;
+          margin-left:  10px;
       }
 
   </style>
@@ -61,22 +32,15 @@
            src="/static/video/{{ videos.0 }}">
     </video>
 
+    <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video" id="playButton"
+         class="media-button video-button">
+    <img src="{{ url_for('static', filename='icons/pause.svg') }}" alt="pause video" id="pauseButton"
+         class="media-button video-button" style="display:none">
 
-    <input type="checkbox" id="playButton">
-    <label for="playButton" class="play-button play mx-3">
-      <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video">
-    </label>
-    <label for="playButton" class="play-button pause mx-3">
-      <img src="{{ url_for('static', filename='icons/pause.svg') }}" alt="pause video">
-    </label>
-
-    <input type="checkbox" id="muteButton">
-    <label for="muteButton" class="mute-button unmute">
-      <img src="{{ url_for('static', filename='icons/mute.svg') }}" alt="unmute">
-    </label>
-    <label for="muteButton" class="mute-button mute">
-      <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="mute">
-    </label>
+    <img src="{{ url_for('static', filename='icons/mute.svg') }}" alt="mute" id="muteButton"
+         class="media-button sound-button" style="display:none">
+    <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="unmute" id="unmuteButton"
+         class="media-button sound-button">
 
     <div style="position: relative;top: -350px;color: white;">
       <div class="container py-5">
@@ -114,32 +78,62 @@
 {% block script %}
 
   <script>
+
+  document.addEventListener("DOMContentLoaded", function(event) {
+
       const videoElement = document.getElementById("jumbotronVideo");
 
-      videoElement.addEventListener('ended', function() {
+      videoElement.addEventListener('ended', function () {
           let current = videoElement.getAttribute('src');
           let options = [
               {% for video_file in videos %}
-              '/static/video/{{ video_file }}',
+                  '/static/video/{{ video_file }}',
               {% endfor %}
           ];
-          options = options.filter(function(value) {return value !== current});
+          options = options.filter(function (value) {
+              return value !== current
+          });
           let pick = options[Math.floor(Math.random() * options.length)];
           videoElement.setAttribute("src", pick);
           videoElement.load();
           videoElement.play();
       });
 
-      let music = new Audio("{{ url_for('static', filename='/audio/carl_filtsch_romance_op_3_no_1.mp3') }}");
+      const music = new Audio("{{ url_for('static', filename='/audio/carl_filtsch_romance_op_3_no_1.mp3') }}");
+      music.muted = true;
       music.loop = true;
+      music.play();
 
-      document.getElementById('muteButton').onclick = function() {
-          if (music.paused) {
-              music.play();
-          } else {
-              music.pause();
-          }
-      };
+      videoElement.onplay = function () {
+          document.getElementById('playButton').style.display = 'none';
+          document.getElementById('pauseButton').style.display = 'inherit';
+      }
+      videoElement.onpause = function () {
+          document.getElementById('playButton').style.display = 'inherit';
+          document.getElementById('pauseButton').style.display = 'none';
+      }
+
+      document.getElementById('playButton').onclick = function () {
+          music.play();
+          videoElement.play();
+      }
+      document.getElementById('pauseButton').onclick = function () {
+          music.pause();
+          videoElement.pause();
+      }
+
+      document.getElementById('muteButton').onclick = function () {
+          music.muted = true;
+          document.getElementById('muteButton').style.display = 'none';
+          document.getElementById('unmuteButton').style.display = 'inherit';
+      }
+      document.getElementById('unmuteButton').onclick = function () {
+          music.muted = false;
+          document.getElementById('muteButton').style.display = 'inherit';
+          document.getElementById('unmuteButton').style.display = 'none';
+      }
+
+  });
 
   </script>
 
