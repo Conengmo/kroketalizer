@@ -16,7 +16,6 @@
       input#muteButton:checked ~ .unmute img {
           display: none;
       }
-
       .mute-button {
           position:relative;
           top: -60px;
@@ -26,6 +25,29 @@
       .mute-button img {
           width: 30px;
           height: 30px;
+      }
+
+      input#playButton {
+          display: none;
+      }
+      .pause img {
+          display: none;
+      }
+      input#playButton:checked ~ .pause img {
+          display: initial;
+      }
+      input#playButton:checked ~ .play img {
+          display: none;
+      }
+      .play-button {
+          position:relative;
+          top: -60px;
+          float: right;
+          right: 50px;
+      }
+      .play-button img {
+          width: 25px;
+          height: 25px;
       }
 
   </style>
@@ -39,12 +61,21 @@
            src="/static/video/{{ videos.0 }}">
     </video>
 
+
+    <input type="checkbox" id="playButton">
+    <label for="playButton" class="play-button play mx-3">
+      <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video">
+    </label>
+    <label for="playButton" class="play-button pause mx-3">
+      <img src="{{ url_for('static', filename='icons/pause.svg') }}" alt="pause video">
+    </label>
+
     <input type="checkbox" id="muteButton">
     <label for="muteButton" class="mute-button unmute">
-      <img src="/static/icons/mute.svg" alt="play music">
+      <img src="{{ url_for('static', filename='icons/mute.svg') }}" alt="unmute">
     </label>
     <label for="muteButton" class="mute-button mute">
-      <img src="/static/icons/speaker.svg" alt="stop music">
+      <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="mute">
     </label>
 
     <div style="position: relative;top: -350px;color: white;">
@@ -99,7 +130,7 @@
           videoElement.play();
       });
 
-      let music = new Audio('/static/audio/carl_filtsch_romance_op_3_no_1.mp3');
+      let music = new Audio("{{ url_for('static', filename='/audio/carl_filtsch_romance_op_3_no_1.mp3') }}");
       music.loop = true;
 
       document.getElementById('muteButton').onclick = function() {
