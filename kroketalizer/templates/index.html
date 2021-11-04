@@ -10,14 +10,14 @@
           float: right;
           right: 50px;
       }
-      .sound-button {
-          width: 30px;
-          height: 30px;
+      .sound-button img {
+          width: 33px;
+          height: 33px;
       }
-      .video-button {
+      .video-button img {
           width: 25px;
           height: 25px;
-          margin-top: 2px;
+          margin-top: 4px;
           margin-left:  10px;
       }
 
@@ -32,15 +32,15 @@
            src="/static/video/{{ videos.0 }}">
     </video>
 
-    <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video" id="playButton"
-         class="media-button video-button">
-    <img src="{{ url_for('static', filename='icons/pause.svg') }}" alt="pause video" id="pauseButton"
-         class="media-button video-button" style="display:none">
+    <span id="playButton" class="media-button video-button">
+      <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video"></span>
+    <span id="pauseButton" class="media-button video-button" style="display:none">
+      <img src="{{ url_for('static', filename='icons/pause.svg') }}" alt="pause video"></span>
 
-    <img src="{{ url_for('static', filename='icons/mute.svg') }}" alt="mute" id="muteButton"
-         class="media-button sound-button" style="display:none">
-    <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="unmute" id="unmuteButton"
-         class="media-button sound-button">
+    <span id="muteButton" class="media-button sound-button" style="display:none">
+      <img src="{{ url_for('static', filename='icons/mute.svg') }}" alt="mute"></span>
+    <span id="unmuteButton" class="media-button sound-button">
+      <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="unmute"></span>
 
     <div style="position: relative;top: -350px;color: white;">
       <div class="container py-5">
