@@ -49,6 +49,7 @@ def test_convert_string(text, expected):
     ('Livestreams', 'Livestreams'),
     ('hi Marcel Something hier', 'hi Marcel $$$ hier'),
     ('Ferdinand Prokofiev Gerardus', 'Ferdinand $$$'),
+    ('Dit hier. En dat.', 'Dit hier. En dat.'),
 ])
 def test_convert_names(text, expected):
     converted = _escape_names(_convert_names(text))

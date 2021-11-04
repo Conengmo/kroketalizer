@@ -27,6 +27,7 @@ def _convert_string(text: str) -> str:
     text = _convert_to_kroket(text)
     text = _replace_article_words(text)
     text = text.replace("'S", "'s")
+    text = re.sub(r'\s+', ' ', text)
     return text
 
 
@@ -114,11 +115,13 @@ conversions_phrase = {
     'dirigent': 'kok',
     'series': ['voordeelmenu\'s', 'combodeal\'s'],
     'programmering': 'menu',
-    'philharmonisch orkest': ['filet americain', 'filodeeg bockworst', 'filet souflesse'],
+    'philharmonisch': ['filet americain', 'filodeeg'],
+    'orkest': '',
     'vriendenloterij': 'gezinszak',
     'dirigeert': 'frituurt',
     'pianisten': 'frietbakkers',
     'speelt': 'bakt',
+    'kassa': 'fruitautomaat',
 }
 
 
@@ -130,35 +133,38 @@ conversions_partial = {
 
 
 def _convert_names(text: str) -> str:
-    name_parts = []
-    new_text_parts = []
-    for i, word in enumerate(text.split()):
-        word_lower = word.lower().rstrip(',:')
-        if word.istitle() and (word_lower in conversions_phrase or any(x in word_lower for x in conversions_partial)):
-            new_text_parts.extend(name_parts)
-            name_parts = []
-            new_text_parts.append(word)
-            continue
-        if word.istitle():
-            name_parts.append(word)
-        elif name_parts and i == 1:
-            new_text_parts.extend(name_parts)
-            name_parts = []
-            new_text_parts.append(word)
-        elif name_parts and i > 1:
+    new_sentences = []
+    for sentence in text.split('. '):
+        name_parts = []
+        new_text_parts = []
+        for i, word in enumerate(sentence.split()):
+            word_lower = word.lower().rstrip(',:')
+            if word.istitle() and (word_lower in conversions_phrase or any(x in word_lower for x in conversions_partial)):
+                new_text_parts.extend(name_parts)
+                name_parts = []
+                new_text_parts.append(word)
+                continue
+            if word.istitle():
+                name_parts.append(word)
+            elif name_parts and i == 1:
+                new_text_parts.extend(name_parts)
+                name_parts = []
+                new_text_parts.append(word)
+            elif name_parts and i > 1:
+                new_text_parts.append(_convert_names_sub(name_parts))
+                name_parts = []
+                new_text_parts.append(word)
+            else:
+                new_text_parts.append(word)
+            if name_parts and word.endswith((':', ',', '.')):
+                new_text_parts.append(_convert_names_sub(name_parts) + word[-1])
+                name_parts = []
+        if name_parts and i > 0:
             new_text_parts.append(_convert_names_sub(name_parts))
-            name_parts = []
-            new_text_parts.append(word)
         else:
-            new_text_parts.append(word)
-        if name_parts and word.endswith((':', ',', '.')):
-            new_text_parts.append(_convert_names_sub(name_parts) + word[-1])
-            name_parts = []
-    if name_parts and i > 0:
-        new_text_parts.append(_convert_names_sub(name_parts))
-    else:
-        new_text_parts.extend(name_parts)
-    return ' '.join(new_text_parts)
+            new_text_parts.extend(name_parts)
+        new_sentences.append(' '.join(new_text_parts))
+    return '. '.join(new_sentences)
 
 
 def _convert_names_sub(name_parts: List[str]) -> str:
