@@ -16,6 +16,11 @@ body {
   margin-bottom: 80px;
   background-color: rgb(242, 242, 242);
 }
+@media (min-width: 992px) {
+    .container {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
 .navbar {
     height: 120px;
     background-color: rgba(0, 0, 0, 0.65);
