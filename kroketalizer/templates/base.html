@@ -23,12 +23,18 @@
 <header>
     <div class="navbar navbar-expand-md border-bottom border-dark shadow-sm">
         <div class="container">
-            <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="80px" height="80px" />
-            <a class="fs-5 ms-3 logo-text" href="/">
-              HET<br/>KROKET<br/>GEBOUW</a>
-            <nav>
-                <a class="p-2" href="/" style="display:none;">Home</a>
-            </nav>
+          <a href="/">
+            <div class="logo-wrapper">
+              <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="80px" height="80px"
+                   alt="hamburger icon">
+            </div>
+            <div class="fs-5 ps-3 logo-text" style="display:inline-block">
+              HET<br/>KROKET<br/>GEBOUW
+            </div>
+          </a>
+          <nav>
+            <a class="p-2" href="/" style="display:none;">Home</a>
+          </nav>
         </div>
     </div>
 </header>
@@ -38,8 +44,26 @@
 
 
 <footer class="footer">
-    <div class="container text-center">
-      <a href="{{ url_for('colofon') }}">colofon</a>
+    <div class="container">
+      <div class="row">
+        <div class="col-4 footer-logo">
+          <a href="/">
+            <div class="logo-wrapper">
+              <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="80px" height="80px"
+                   alt="hamburger icon">
+            </div>
+            <div class="fs-5 ps-3 logo-text" style="display:inline-block">
+              <span style="color:#ABA39FFF;">alles<br/>smaakt<br/>beter<br/>in<br/></span>
+              HET<br/>KROKET<br/>GEBOUW
+            </div>
+          </a>
+        </div>
+      <div class="col-4 footer-links">
+        <h3 class="fs-5">OVER ONS</h3>
+        <ul>
+          <li><a href="{{ url_for('colofon') }}">Colofon</a></li>
+        </ul>
+      </div>
     </div>
 </footer>
 
