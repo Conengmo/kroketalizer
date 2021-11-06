@@ -103,7 +103,7 @@ names = [
     'Kibbeling',
     'Sundae',
     'Uitsmijter',
-    'Ijststam',
+    'Ijsstam',
 ]
 names_lookup = {x[0]: x for x in names}
 
@@ -122,6 +122,9 @@ conversions_phrase = {
     'pianisten': 'frietbakkers',
     'speelt': 'bakt',
     'kassa': 'fruitautomaat',
+    'kaartverkoop': 'bestelling',
+    'online': 'binnen',
+    'offline': 'buiten',
 }
 
 
@@ -242,4 +245,4 @@ def _is_word(text: str, ind_start: int, ind_end: int):
 
 
 def _re_phrase(phrase: str) -> str:
-    return rf'\b{re.escape(phrase)}(?=([\s\t:,._-])|$)'
+    return rf'\b{re.escape(phrase)}(?=([\s\t\):,._-])|$)'

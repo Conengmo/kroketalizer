@@ -37,6 +37,10 @@ def _escape_names(text: str) -> str:
     ('Grote Pianisten: Igor Levit speelt Schubert, Sjostakovitsj en Prokofjev',
      'Grote Frietbakkers: Igor $$$ bakt $$$, $$$ en $$$'),
     ('Kristiina Poska dirigeert Pärt en Sibelius', 'Kristiina $$$ frituurt $$$ en $$$'),
+    (
+        'Ook is er tijdelijk geen kaartverkoop (zowel online als offline) mogelijk.',
+        'Ook is er tijdelijk geen bestelling (zowel binnen als buiten) mogelijk.',
+     )
 ])
 def test_convert_string(text, expected):
     converted = _escape_names(_convert_string(text))
