@@ -13,6 +13,7 @@ html {
 }
 body {
     background-color: rgb(242, 242, 242);
+    font-family: open-sans-light, sans-serif;
 }
 @media (min-width: 992px) {
     .container {
@@ -55,9 +56,6 @@ main {
     padding: 25px 28px 35px;
 }
 
-h1, h2, h3, h4, h5, h6, p, a {
-    font-family: open-sans-light, sans-serif;
-}
 a {
     color: #000;
     text-decoration: none;
