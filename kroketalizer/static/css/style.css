@@ -12,7 +12,7 @@ html {
   min-height: 100%;
 }
 body {
-  background-color: rgb(242, 242, 242);
+    background-color: rgb(242, 242, 242);
 }
 @media (min-width: 992px) {
     .container {
@@ -35,6 +35,10 @@ body {
 main {
     padding-top: 3rem;
     padding-bottom: 3rem;
+    background-image: url('/static/icons/frietzak.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom right;
 }
 .footer {
     background-color: #FFF;
