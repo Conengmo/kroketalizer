@@ -31,6 +31,8 @@ body {
     text-decoration: none;
 }
 .navbar > .container {
+    padding-left: initial;
+    padding-right: initial;
     margin-left: 40px;
     justify-content: normal;
 }

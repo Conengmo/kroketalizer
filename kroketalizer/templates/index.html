@@ -44,7 +44,6 @@
       .jumbotron-wrapper {
           height: 550px;
           margin-top: -120px;
-          z-index: -1;
           background-color: #3d3100;
       }
       #jumbotronVideo {
@@ -52,6 +51,29 @@
           height: 550px;
           object-fit: cover;
           opacity: 0.75;
+      }
+      .jumbotron-text {
+          position: relative;
+          top: -325px;
+          color: white;
+      }
+
+      @media only screen and (max-width: 760px) {
+          .jumbotron-wrapper {
+              background-color: black;
+          }
+          #jumbotronVideo {
+              display: none;
+          }
+          .jumbotron-video-replacement {
+              height: 100%;
+              background-image: url('/static/img/pexels-cottonbro-4253305.jpg');
+              background-size: contain;
+              opacity: 0.75;
+          }
+          .media-button {
+              display: none;
+          }
       }
 
 
@@ -62,7 +84,8 @@
 {% block content %}
 
   <div class="jumbotron-wrapper">
-    <video id="jumbotronVideo" autoplay muted src="/static/video/{{ videos.0 }}"></video>
+    <video id="jumbotronVideo" muted preload="none" src="/static/video/{{ videos.0 }}"></video>
+    <div class="jumbotron-video-replacement"></div>
 
     <span id="playButton" class="media-button video-button">
       <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video"></span>
@@ -74,7 +97,7 @@
     <span id="unmuteButton" class="media-button sound-button">
       <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="unmute"></span>
 
-    <div style="position: relative;top: -325px;color: white;">
+    <div class="jumbotron-text">
       <div class="container py-5">
         <h1 class="display-3 fw-bold">{{ jumbotron_title }}</h1>
         <h2 class="col-md-8 fs-1">{{ jumbotron_text }}</h2>
@@ -94,7 +117,7 @@
       {% for item in content_top %}
         <div class="col">
           <div class="card h-100">
-            <img src="/static/img/{{ item.2 }}" class="card-img-top"
+            <img src="/static/img_random/{{ item.2 }}" class="card-img-top"
                  style="aspect-ratio: 16 / 9; object-fit: cover;">
             <div class="card-body">
               <h3 class="card-title">{{ item.0 }}</h3>
@@ -115,8 +138,8 @@
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-bottom:100px;">
       {% for item in content_mid %}
       <div class="col">
-        <div class="card text-white">
-          <img src="/static/img/{{ item.2 }}" class="card-img"
+        <div class="card text-white mb-4">
+          <img src="/static/img_random/{{ item.2 }}" class="card-img"
                style="aspect-ratio: 0.94; object-fit: cover;">
           <div class="card-img-overlay darken-hover-background"></div>
           <div class="card-img-overlay">
@@ -132,7 +155,7 @@
       {% for item in content_bottom %}
         <div class="col p-4">
           <div class="card h-100">
-            <img src="/static/img/{{ item.2 }}" class="card-img-top"
+            <img src="/static/img_random/{{ item.2 }}" class="card-img-top"
                  style="aspect-ratio: 9 / 12; object-fit: cover;">
             <div class="card-body">
               <h3 class="card-title">{{ item.0 }}</h3>
@@ -158,55 +181,59 @@
 
       const videoElement = document.getElementById("jumbotronVideo");
 
-      videoElement.addEventListener('ended', function () {
-          let current = videoElement.getAttribute('src');
-          let options = [
-              {% for video_file in videos %}
-                  '/static/video/{{ video_file }}',
-              {% endfor %}
-          ];
-          options = options.filter(function (value) {
-              return value !== current
+      if (getComputedStyle(videoElement).getPropertyValue('display') !== 'none') {
+          videoElement.play();
+
+          videoElement.addEventListener('ended', function () {
+              let current = videoElement.getAttribute('src');
+              let options = [
+                  {% for video_file in videos %}
+                      '/static/video/{{ video_file }}',
+                  {% endfor %}
+              ];
+              options = options.filter(function (value) {
+                  return value !== current
+              });
+              let pick = options[Math.floor(Math.random() * options.length)];
+              videoElement.setAttribute("src", pick);
+              videoElement.play();
           });
-          let pick = options[Math.floor(Math.random() * options.length)];
-          videoElement.setAttribute("src", pick);
-          videoElement.load();
-          videoElement.play();
-      });
 
-      const music = new Audio("{{ url_for('static', filename='/audio/carl_filtsch_romance_op_3_no_1.mp3') }}");
-      music.muted = true;
-      music.loop = true;
-      music.play();
-
-      videoElement.onplay = function () {
-          document.getElementById('playButton').style.display = 'none';
-          document.getElementById('pauseButton').style.display = 'inherit';
-      }
-      videoElement.onpause = function () {
-          document.getElementById('playButton').style.display = 'inherit';
-          document.getElementById('pauseButton').style.display = 'none';
-      }
-
-      document.getElementById('playButton').onclick = function () {
-          music.play();
-          videoElement.play();
-      }
-      document.getElementById('pauseButton').onclick = function () {
-          music.pause();
-          videoElement.pause();
-      }
-
-      document.getElementById('muteButton').onclick = function () {
+          const music = new Audio("{{ url_for('static', filename='/audio/carl_filtsch_romance_op_3_no_1.mp3') }}");
           music.muted = true;
-          document.getElementById('muteButton').style.display = 'none';
-          document.getElementById('unmuteButton').style.display = 'inherit';
-      }
-      document.getElementById('unmuteButton').onclick = function () {
-          music.muted = false;
-          document.getElementById('muteButton').style.display = 'inherit';
-          document.getElementById('unmuteButton').style.display = 'none';
-      }
+          music.loop = true;
+          music.play();
+
+          videoElement.onplay = function () {
+              document.getElementById('playButton').style.display = 'none';
+              document.getElementById('pauseButton').style.display = 'inherit';
+          }
+          videoElement.onpause = function () {
+              document.getElementById('playButton').style.display = 'inherit';
+              document.getElementById('pauseButton').style.display = 'none';
+          }
+
+          document.getElementById('playButton').onclick = function () {
+              music.play();
+              videoElement.play();
+          }
+          document.getElementById('pauseButton').onclick = function () {
+              music.pause();
+              videoElement.pause();
+          }
+
+          document.getElementById('muteButton').onclick = function () {
+              music.muted = true;
+              document.getElementById('muteButton').style.display = 'none';
+              document.getElementById('unmuteButton').style.display = 'inherit';
+          }
+          document.getElementById('unmuteButton').onclick = function () {
+              music.muted = false;
+              document.getElementById('muteButton').style.display = 'inherit';
+              document.getElementById('unmuteButton').style.display = 'none';
+          }
+
+      }  // end check not on mobile
 
   });
 

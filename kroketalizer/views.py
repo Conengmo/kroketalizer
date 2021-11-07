@@ -18,7 +18,7 @@ def index():
         'jumbotron_text': r.css('h2::text').get(),
     }
 
-    images = [fn for fn in os.listdir('kroketalizer/static/img/') if fn.endswith('.jpg')]
+    images = [fn for fn in os.listdir('kroketalizer/static/img_random/') if fn.endswith('.jpg')]
     random.shuffle(images)
 
     content_top = []
