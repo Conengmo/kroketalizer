@@ -24,6 +24,7 @@ body {
 .navbar {
     height: 120px;
     background-color: rgba(0, 0, 0, 0.65);
+    z-index: 1;
 }
 .navbar a, .navbar a:hover {
     color: #FFF;
