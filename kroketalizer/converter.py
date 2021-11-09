@@ -110,6 +110,7 @@ names_lookup = {x[0]: x for x in names}
 
 conversions_phrase = {
     'concertgebouw': 'kroketgebouw',
+    'fonds': 'fooienpot',
     'klinkt': 'smaakt',
     'mooier': 'beter',
     'dirigent': 'kok',
@@ -125,6 +126,10 @@ conversions_phrase = {
     'kaartverkoop': 'bestelling',
     'online': 'binnen',
     'offline': 'buiten',
+    'kaarten': 'friet',
+    'schermen': 'toonbank',
+    'evenement': 'partijtje',
+    'concert of evenement': 'kinderpartijtje',
 }
 
 
@@ -178,7 +183,7 @@ def _convert_names_sub(name_parts: List[str]) -> str:
 
 
 def _convert_to_kroket(text: str) -> str:
-    for pattern, repl in conversions_phrase.items():
+    for pattern, repl in sorted(conversions_phrase.items(), key=lambda x: len(x[0]), reverse=True):
         if isinstance(repl, list):
             repl = random.sample(repl, 1)[0]
         text = _replace(_re_phrase(pattern), repl, text)
