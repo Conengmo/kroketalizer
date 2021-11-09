@@ -23,18 +23,23 @@
 <header>
     <div class="navbar navbar-expand-md shadow-sm">
         <div class="container">
-          <a href="/">
-            <div class="logo-wrapper">
-              <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="80px" height="80px"
-                   alt="hamburger icon">
+          <div class="row">
+            <div class="col">
+              <a href="/">
+                <div class="logo-wrapper">
+                  <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="40px" height="40px"
+                       alt="hamburger icon">
+                </div>
+                <div class="ps-2 logo-text" style="display:inline-block">
+                  HET<br/>KROKET<br/>GEBOUW
+                </div>
+              </a>
+              <nav>
+                <a class="p-2" href="/" style="display:none;">Home</a>
+              </nav>
             </div>
-            <div class="fs-5 ps-3 logo-text" style="display:inline-block">
-              HET<br/>KROKET<br/>GEBOUW
-            </div>
-          </a>
-          <nav>
-            <a class="p-2" href="/" style="display:none;">Home</a>
-          </nav>
+          </div>
+
         </div>
     </div>
 </header>

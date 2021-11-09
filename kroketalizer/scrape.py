@@ -6,11 +6,7 @@ from scrapy.http import HtmlResponse
 
 def get_content(body: bytes) -> dict:
     r = HtmlResponse('', body=body)
-    context = {
-        'jumbotron_title': r.css('h1::text').get(),
-        'jumbotron_text': r.css('h2::text').get(),
-    }
-
+    context = {}
     images = [fn for fn in os.listdir('kroketalizer/static/img_random/') if fn.endswith('.jpg')]
     random.shuffle(images)
 

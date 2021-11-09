@@ -6,7 +6,7 @@
   <style>
       .media-button {
           position:relative;
-          top: -60px;
+          top: -300px;
           float: right;
           right: 50px;
       }
@@ -21,41 +21,23 @@
           margin-left:  10px;
       }
 
-      .card-img-overlay h5, .card-img-overlay  p{
-          font-family: open-sans, sans-serif;
-      }
-      .darken-hover-background {
-          background-color: black;
-          height: 100%;
-          opacity: 0.2;
-      }
-      .darken-hover-background:hover {
-        opacity: 0.5;
-        transition: opacity .3s;
-      }
-      .card-img-overlay {
-          top: inherit;
-          padding: 1.5rem;
-      }
-      .card-img-overlay p {
-         text-transform: uppercase;
-      }
-
       .jumbotron-wrapper {
-          height: 550px;
-          margin-top: -120px;
-          background-color: #3d3100;
+          height: 880px;
+          margin-top: -70px;
+          background-color: #544300;
+          clip-path: circle(1500px at 42% -620px);
       }
       #jumbotronVideo {
           width: 100%;
-          height: 550px;
+          height: 880px;
           object-fit: cover;
-          opacity: 0.75;
+          opacity: 0.8;
       }
       .jumbotron-text {
           position: relative;
-          top: -325px;
+          top: -800px;
           color: white;
+          font-family: open-sans, sans-serif;
       }
 
       @media only screen and (max-width: 760px) {
@@ -99,8 +81,22 @@
 
     <div class="jumbotron-text">
       <div class="container py-5">
-        <h1 class="display-3 fw-bold">{{ jumbotron_title }}</h1>
-        <h2 class="col-md-8 fs-1">{{ jumbotron_text }}</h2>
+        <div class="row">
+          <div class="col-lg-4 col-md-2">
+            <div style="border-bottom: 3px white solid; display:flex; padding-bottom:20px; margin-bottom:25px;">
+                <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="120px" height="120px"
+                     alt="hamburger icon" style="filter:invert(1); align-self:center;">
+              <div class="fs-1 ps-3 logo-text" style="align-self:center; line-height: 1.2; letter-spacing: 0.18rem;">
+                HET<br/>KROKET<br/>GEBOUW
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h2 class="fs-3 fw-bold" style="">Samen smaakt alles beter</h2>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -108,20 +104,17 @@
 
   <main role="main" class="container">
 
-    <div class="row mb-3">
-      <div class="col">
-        <h2>Nieuws</h2>
-      </div>
-    </div>
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 mb-5">
+  <div class="main-inner">
+
+    <div class="row row-cols-lg-2 row-cols-md-2 row-cols-1 g-4 mb-5">
       {% for item in content_top %}
         <div class="col">
-          <div class="card h-100">
-            <img src="/static/img_random/{{ item.2 }}" class="card-img-top"
+          <div class="card h-100 text-white">
+            <img src="/static/img_random/{{ item.2 }}" class="card-img"
                  style="aspect-ratio: 16 / 9; object-fit: cover;">
-            <div class="card-body">
-              <h3 class="card-title">{{ item.0 }}</h3>
+            <div class="card-img-overlay p-5">
               <p class="card-text">{{ item.1 }}</p>
+              <h3 class="card-title">{{ item.0 }}</h3>
             </div>
           </div>
         </div>
@@ -136,11 +129,10 @@
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-bottom:100px;">
       {% for item in content_mid %}
       <div class="col">
-        <div class="card text-white mb-4">
+        <div class="card mb-4">
           <img src="/static/img_random/{{ item.2 }}" class="card-img"
-               style="aspect-ratio: 0.94; object-fit: cover;">
-          <div class="card-img-overlay darken-hover-background"></div>
-          <div class="card-img-overlay">
+               style="aspect-ratio: 16 / 7; object-fit:cover; border-radius: 2rem 2rem 0 0">
+          <div class="card-body">
             <h5 class="card-title">{{ item.0 }}</h5>
             <p class="card-text">{{ item.1 }}</p>
           </div>
@@ -149,14 +141,14 @@
       {% endfor %}
     </div>
 
-    <div class="row row-cols-lg-4 row-cols-md-2 row-cols-1 g-4">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4">
       {% for item in content_bottom %}
         <div class="col p-4">
-          <div class="card h-100">
+          <div class="card h-100 p-3">
             <img src="/static/img_random/{{ item.2 }}" class="card-img-top"
-                 style="aspect-ratio: 9 / 12; object-fit: cover;">
-            <div class="card-body">
-              <h3 class="card-title">{{ item.0 }}</h3>
+                 style="aspect-ratio: 16 / 13; object-fit: cover;">
+            <div class="card-body py-4 px-0">
+              <h4 class="card-title">{{ item.0 }}</h4>
               <p class="card-text">{{ item.1 }}</p>
             </div>
           </div>
@@ -164,6 +156,7 @@
       {% endfor %}
     </div>
 
+  </div>
   </main>
 
 {% endblock %}
