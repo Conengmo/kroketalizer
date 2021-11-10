@@ -40,7 +40,8 @@ def _escape_names(text: str) -> str:
     (
         'Ook is er tijdelijk geen kaartverkoop (zowel online als offline) mogelijk.',
         'Ook is er tijdelijk geen bestelling (zowel binnen als buiten) mogelijk.',
-     )
+     ),
+    ('Collegium Vocale Gent', ''),
 ])
 def test_convert_string(text, expected):
     converted = _escape_names(_convert_string(text))

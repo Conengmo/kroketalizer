@@ -6,9 +6,11 @@
   <style>
       .media-button {
           position:relative;
-          top: -300px;
           float: right;
-          right: 50px;
+          opacity: 0.5;
+      }
+      .media-button:hover {
+          opacity: 1;
       }
       .sound-button img {
           width: 33px;
@@ -22,8 +24,9 @@
       }
 
       .jumbotron-wrapper {
+          position: absolute;
+          top: 70px;
           height: 880px;
-          margin-top: -70px;
           background-color: #544300;
           clip-path: circle(1500px at 42% -620px);
       }
@@ -35,7 +38,6 @@
       }
       .jumbotron-text {
           position: relative;
-          top: -800px;
           color: white;
           font-family: open-sans, sans-serif;
       }
@@ -57,7 +59,18 @@
               display: none;
           }
       }
-
+      .selection-pills span {
+          background: white;
+          border: 1px #b2394b solid;
+          color: #b2394b;
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+          font-family: open-sans, sans-serif;
+      }
+      .selection-pills span:hover {
+          color: white;
+          background-color: #b2394b;
+      }
 
   </style>
 {% endblock style %}
@@ -68,50 +81,60 @@
   <div class="jumbotron-wrapper">
     <video id="jumbotronVideo" muted preload="none" src="/static/video/{{ videos.0 }}"></video>
     <div class="jumbotron-video-replacement"></div>
+  </div>
 
-    <span id="playButton" class="media-button video-button">
-      <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video"></span>
-    <span id="pauseButton" class="media-button video-button" style="display:none">
-      <img src="{{ url_for('static', filename='icons/pause.svg') }}" alt="pause video"></span>
+  <div class="yellow-gradient">
 
-    <span id="muteButton" class="media-button sound-button" style="display:none">
-      <img src="{{ url_for('static', filename='icons/mute.svg') }}" alt="mute"></span>
-    <span id="unmuteButton" class="media-button sound-button">
-      <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="unmute"></span>
+  <main role="main" class="container">
 
     <div class="jumbotron-text">
-      <div class="container py-5">
-        <div class="row">
-          <div class="col-lg-4 col-md-2">
-            <div style="border-bottom: 3px white solid; display:flex; padding-bottom:20px; margin-bottom:25px;">
-                <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="120px" height="120px"
-                     alt="hamburger icon" style="filter:invert(1); align-self:center;">
-              <div class="fs-1 ps-3 logo-text" style="align-self:center; line-height: 1.2; letter-spacing: 0.18rem;">
-                HET<br/>KROKET<br/>GEBOUW
-              </div>
+      <div class="row py-4" style="margin-bottom:7rem;">
+        <div class="col-lg-4 col-md-2">
+          <div style="border-bottom: 3px white solid; display:flex; padding-bottom:20px; margin-bottom:25px;">
+            <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="120px" height="120px"
+                 alt="hamburger icon" style="filter:invert(1); align-self:center;">
+            <div class="fs-1 ps-3 logo-text" style="align-self:center; line-height: 1.2; letter-spacing: 0.18rem;">
+              HET<br/>KROKET<br/>GEBOUW
             </div>
           </div>
+          <h2 class="fs-3 fw-bold" style="">Samen smaakt alles beter</h2>
         </div>
-        <div class="row">
-          <div class="col">
-            <h2 class="fs-3 fw-bold" style="">Samen smaakt alles beter</h2>
-          </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <span id="playButton" class="media-button video-button">
+          <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video"></span>
+          <span id="pauseButton" class="media-button video-button" style="display:none">
+          <img src="{{ url_for('static', filename='icons/pause.svg') }}" alt="pause video"></span>
+
+          <span id="muteButton" class="media-button sound-button" style="display:none">
+          <img src="{{ url_for('static', filename='icons/mute.svg') }}" alt="mute"></span>
+          <span id="unmuteButton" class="media-button sound-button">
+          <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="unmute"></span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row px-lg-4" style="position:relative; margin-top:1rem; margin-bottom:5rem; background:white; border-radius:1.5rem;">
+      <div class="col" style="padding: 3rem; height:350px;">
+        <h2 class="title-red mb-3">Kies een kroket</h2>
+        <h6>Waar heb je trek in?</h6>
+        <div class="selection-pills  mt-3">
+          {% for snack in snacks %}
+            <span class="badge rounded-pill shadow-sm mb-3 me-1">{{ snack }}</span>
+          {% endfor %}
         </div>
       </div>
     </div>
 
-  </div>
-
-  <main role="main" class="container">
-
-  <div class="main-inner">
-
-    <div class="row row-cols-lg-2 row-cols-md-2 row-cols-1 g-4 mb-5">
+    <div class="row row-cols-md-2 row-cols-1 g-4 mb-5">
       {% for item in content_top %}
         <div class="col">
           <div class="card h-100 text-white">
             <img src="/static/img_random/{{ item.2 }}" class="card-img"
-                 style="aspect-ratio: 16 / 9; object-fit: cover;">
+                 style="aspect-ratio: 16 / 10; object-fit: cover;">
             <div class="card-img-overlay p-5">
               <p class="card-text">{{ item.1 }}</p>
               <h3 class="card-title">{{ item.0 }}</h3>
@@ -123,33 +146,48 @@
 
     <div class="row mb-3">
       <div class="col">
-        <h2>Aankomend</h2>
+        <h2 class="title-red ps-3">Aankomend</h2>
       </div>
     </div>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-bottom:100px;">
       {% for item in content_mid %}
       <div class="col">
-        <div class="card mb-4">
+        <div class="card h-100 mb-4">
+          <div style="position:relative;">
           <img src="/static/img_random/{{ item.2 }}" class="card-img"
-               style="aspect-ratio: 16 / 7; object-fit:cover; border-radius: 2rem 2rem 0 0">
-          <div class="card-body">
-            <h5 class="card-title">{{ item.0 }}</h5>
-            <p class="card-text">{{ item.1 }}</p>
+               style="aspect-ratio: 16 / 10; object-fit:cover; border-radius: 2rem 2rem 0 0">
+          <div style="height:50px; position:absolute; bottom:0; background:white; width:80%;"></div>
+          <div style="height:50px; position:absolute; left:80%; bottom:0; background:white; width:20%;
+                      clip-path:polygon(0 0, 0 100%, 100% 100%);"></div>
+            </div>
+          <div class="card-body pt-0 pb-2 px-4">
+            <h5 class="card-title title-red">{{ item.0 }}</h5>
+            <p class="card-text p-red">{{ item.1 }}</p>
           </div>
         </div>
       </div>
       {% endfor %}
     </div>
 
+  </main>
+  </div>
+
+  <div class="container pt-5">
+
+    <div class="row">
+      <div class="col ps-5 mb-3">
+        <h2 class="title-red">Uitgebakken</h2>
+      </div>
+    </div>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4">
       {% for item in content_bottom %}
-        <div class="col p-4">
+        <div class="col p-4" style="margin-top:0;">
           <div class="card h-100 p-3">
             <img src="/static/img_random/{{ item.2 }}" class="card-img-top"
                  style="aspect-ratio: 16 / 13; object-fit: cover;">
             <div class="card-body py-4 px-0">
-              <h4 class="card-title">{{ item.0 }}</h4>
-              <p class="card-text">{{ item.1 }}</p>
+              <h4 class="card-title title-red">{{ item.0 }}</h4>
+              <p class="card-text" style="font-size:1rem">{{ item.1 }}</p>
             </div>
           </div>
         </div>
@@ -157,7 +195,18 @@
     </div>
 
   </div>
-  </main>
+
+  <div style="height:40vw; clip-path: circle(1500px at 42% 1500px);
+              background:linear-gradient(100deg,rgba(0,79,89,0.7) 20%,rgba(0,79,89,0) 50%), url('/static/img/Fast_food_restaurant_Hesburger_in_Kajaani.JPG');
+              background-size:cover; background-position:center; background-repeat:no-repeat;
+              margin-top:-120px; position:relative; z-index:-1;">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+      </div>
+    </div>
+  </div>
+  </div>
 
 {% endblock %}
 

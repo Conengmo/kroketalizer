@@ -43,6 +43,7 @@ names = [
     'Garnalenkroket',
     'Groentenkroket',
     'Kaaskroket',
+    'Kaasstengel',
     'Bamischijf',
     'Nasischijf',
     'Gehaktbal',
@@ -65,17 +66,19 @@ names = [
     'Ragoezie',
     'Loempia',
     'Visstick',
+    'Viskroket',
     'Zeestick',
     'Loempidel',
     'Souflesse',
     'Taco',
     'Bonita',
     'Bitterbal',
+    'Bittergarnituur',
     'Kipnugget',
     'Kipfinger',
     'Kipkrokantje',
     'Chickenwing',
-    'Chickenstrip'
+    'Chickenstrip',
     'Truffelkroket',
     'Sparerib',
     'Halve-haan',
@@ -103,7 +106,7 @@ names = [
     'Kibbeling',
     'Sundae',
     'Uitsmijter',
-    'Ijsstam',
+    'IJsstam',
 ]
 names_lookup = {x[0]: x for x in names}
 
@@ -130,6 +133,7 @@ conversions_phrase = {
     'schermen': 'toonbank',
     'evenement': 'partijtje',
     'concert of evenement': 'kinderpartijtje',
+    'Collegium Vocale Gent': 'collegium friture',
 }
 
 

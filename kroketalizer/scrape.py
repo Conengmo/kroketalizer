@@ -33,6 +33,8 @@ def get_content(body: bytes) -> dict:
         text = block.css('h3::text').get().strip()
         if header and text:
             content_mid.append((header, text, images.pop()))
+        if len(content_mid) == 3:
+            break
     context['content_mid'] = content_mid
 
     convert_bottom = []

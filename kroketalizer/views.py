@@ -5,7 +5,7 @@ from flask import render_template
 
 from . import app
 from .cache import get_body_from_cache
-from .converter import convert
+from .converter import convert, names
 from .scrape import get_content
 
 
@@ -19,6 +19,8 @@ def index():
 
     context['videos'] = [fn for fn in os.listdir('kroketalizer/static/video/') if fn.endswith('.mp4')]
     random.shuffle(context['videos'])
+
+    context['snacks'] = map(str.lower, sorted(random.sample(names, k=16)))
 
     return render_template('index.html', **context)
 
