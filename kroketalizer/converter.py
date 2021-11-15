@@ -127,6 +127,7 @@ conversions_phrase = {
     'speelt': 'bakt',
     'kassa': 'fruitautomaat',
     'kaartverkoop': 'bestelling',
+    'kaartverkoopsysteem': 'bestelsysteem',
     'online': 'binnen',
     'offline': 'buiten',
     'kaarten': 'friet',

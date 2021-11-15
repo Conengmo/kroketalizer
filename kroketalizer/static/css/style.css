@@ -55,11 +55,31 @@ main {
 .jumbotron {
     background-color: #fffcfc;
 }
+
 .card {
     border: none;
+    border-radius: 2rem;
 }
 .card-body, .card-img-overlay {
     padding: 25px 28px 35px;
+}
+.card-body {
+    background: #FFF;
+    position: relative;
+}
+.card-img-overlay {
+    top: inherit;
+}
+.card-img-wrapper {
+    overflow: hidden;
+    border-radius: 2rem;
+}
+.card img {
+    border-radius: 2rem;
+    transition: transform .8s ease;
+}
+.card img:hover {
+    transform: scale(1.05);
 }
 
 a {
@@ -109,15 +129,6 @@ a:hover {
     margin: 0;
 }
 
-.card {
-    border-radius: 2rem;
-}
-.card img {
-    border-radius: 2rem;
-}
-.card-img-overlay {
-    top: inherit;
-}
 .card-img-overlay h3 {
     font-family: open-sans, sans-serif;
     font-weight: bold;

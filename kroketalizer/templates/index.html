@@ -133,8 +133,10 @@
       {% for item in content_top %}
         <div class="col">
           <div class="card h-100 text-white">
-            <img src="/static/img_random/{{ item.2 }}" class="card-img"
-                 style="aspect-ratio: 16 / 10; object-fit: cover;">
+            <div class="card-img-wrapper">
+              <img src="/static/img_random/{{ item.2 }}" class="card-img"
+                   style="aspect-ratio: 16 / 10; object-fit: cover;">
+            </div>
             <div class="card-img-overlay p-5">
               <p class="card-text">{{ item.1 }}</p>
               <h3 class="card-title">{{ item.0 }}</h3>
@@ -154,8 +156,10 @@
       <div class="col">
         <div class="card h-100 mb-4">
           <div style="position:relative;">
-          <img src="/static/img_random/{{ item.2 }}" class="card-img"
-               style="aspect-ratio: 16 / 10; object-fit:cover; border-radius: 2rem 2rem 0 0">
+          <div class="card-img-wrapper">
+            <img src="/static/img_random/{{ item.2 }}" class="card-img"
+                 style="aspect-ratio: 16 / 10; object-fit:cover; border-radius: 2rem 2rem 0 0">
+          </div>
           <div style="height:50px; position:absolute; bottom:0; background:white; width:80%;"></div>
           <div style="height:50px; position:absolute; left:80%; bottom:0; background:white; width:20%;
                       clip-path:polygon(0 0, 0 100%, 100% 100%);"></div>
@@ -183,8 +187,10 @@
       {% for item in content_bottom %}
         <div class="col p-4" style="margin-top:0;">
           <div class="card h-100 p-3">
-            <img src="/static/img_random/{{ item.2 }}" class="card-img-top"
-                 style="aspect-ratio: 16 / 13; object-fit: cover;">
+            <div class="card-img-wrapper">
+              <img src="/static/img_random/{{ item.2 }}" class="card-img-top"
+                  style="aspect-ratio: 16 / 13; object-fit: cover;">
+            </div>
             <div class="card-body py-4 px-0">
               <h4 class="card-title title-red">{{ item.0 }}</h4>
               <p class="card-text" style="font-size:1rem">{{ item.1 }}</p>
