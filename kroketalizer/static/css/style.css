@@ -81,6 +81,12 @@ main {
 .card img:hover {
     transform: scale(1.05);
 }
+.img-see-through {
+    background-color: #544300;
+}
+.img-see-through > img {
+    opacity: 0.7;
+}
 
 a {
     color: #000;
