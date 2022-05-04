@@ -63,15 +63,13 @@ main {
 .card-body, .card-img-overlay {
     padding: 25px 28px 35px;
 }
-.card-body {
-    background: #FFF;
-    position: relative;
-}
 .card-img-overlay {
     top: inherit;
 }
 .card-img-wrapper {
     overflow: hidden;
+}
+.img-rounded {
     border-radius: 2rem;
 }
 .card img {

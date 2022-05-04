@@ -134,7 +134,7 @@
       {% for item in content_top %}
         <div class="col">
           <div class="card h-100 text-white">
-            <div class="card-img-wrapper img-see-through">
+            <div class="card-img-wrapper img-rounded img-see-through">
               <img src="/static/img_random/{{ item.2 }}" class="card-img"
                    style="aspect-ratio: 16 / 10; object-fit: cover;">
             </div>
@@ -157,14 +157,17 @@
       <div class="col">
         <div class="card h-100 mb-4">
           <div style="position:relative;">
-          <div class="card-img-wrapper">
-            <img src="/static/img_random/{{ item.2 }}" class="card-img"
-                 style="aspect-ratio: 16 / 10; object-fit:cover; border-radius: 2rem 2rem 0 0">
-          </div>
-          <div style="height:50px; position:absolute; bottom:0; background:white; width:80%;"></div>
-          <div style="height:50px; position:absolute; left:80%; bottom:0; background:white; width:20%;
-                      clip-path:polygon(0 0, 0 100%, 100% 100%);"></div>
+            <div class="card-img-wrapper">
+              <img src="/static/img_random/{{ item.2 }}" class="card-img"
+                   style="aspect-ratio: 16 / 10; object-fit:cover; border-radius: 2rem 2rem 0 0">
             </div>
+            <div style="height:50px; position:absolute; bottom:0; background:white; width:80%;"></div>
+            <div style="height:50px; position:absolute; left:80%; bottom:0; background:white; width:20%;
+                        clip-path:polygon(0px 0px, 0px 100%, 100% 100%, 82.62% 91.23%, 66.61% 76.00%, 54.05% 56%,
+                                          42.98% 36%, 33.38% 18.37%, 20% 6%, 0% 0%);">
+
+            </div>
+          </div>
           <div class="card-body pt-0 pb-2 px-4">
             <h5 class="card-title title-red">{{ item.0 }}</h5>
             <p class="card-text p-red">{{ item.1 }}</p>
@@ -188,7 +191,7 @@
       {% for item in content_bottom %}
         <div class="col p-4" style="margin-top:0;">
           <div class="card h-100 p-3">
-            <div class="card-img-wrapper">
+            <div class="card-img-wrapper img-rounded">
               <img src="/static/img_random/{{ item.2 }}" class="card-img-top"
                   style="aspect-ratio: 16 / 13; object-fit: cover;">
             </div>
