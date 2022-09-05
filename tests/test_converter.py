@@ -33,7 +33,7 @@ def _escape_names(text: str) -> str:
 
 
 @pytest.mark.parametrize("text, expected", [
-    ('hi Het Concertgebouw', 'hi Het Kroketgebouw'),
+    ('hi Het Concert' + 'gebouw', 'hi Het Kroketgebouw'),
     ('Grote Pianisten: Igor Levit speelt Schubert, Sjostakovitsj en Prokofjev',
      'Grote Frietbakkers: Igor $$$ bakt $$$, $$$ en $$$'),
     ('Kristiina Poska dirigeert Pärt en Sibelius', 'Kristiina $$$ frituurt $$$ en $$$'),
@@ -49,7 +49,7 @@ def test_convert_string(text, expected):
 
 
 @pytest.mark.parametrize("text, expected", [
-    ('hi Het Concertgebouw', 'hi Het Concertgebouw'),
+    ('hi Het Concert' + 'gebouw', 'hi Het Concert' + 'gebouw'),
     ('Over het gebouw', 'Over het gebouw'),
     ('Livestreams', 'Livestreams'),
     ('hi Marcel Something hier', 'hi Marcel $$$ hier'),
@@ -62,7 +62,7 @@ def test_convert_names(text, expected):
 
 
 @pytest.mark.parametrize("text, expected", [
-    ('hi Het Concertgebouw', 'hi Het Kroketgebouw'),
+    ('hi Het Concert' + 'gebouw', 'hi Het Kroketgebouw'),
     ('Grote Pianisten:', 'Grote Frietbakkers:'),
 ])
 def test_convert_to_kroket(text, expected):

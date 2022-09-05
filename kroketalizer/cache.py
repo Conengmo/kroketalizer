@@ -6,7 +6,7 @@ import requests
 
 
 def get_body_from_cache() -> bytes:
-    url = 'https://www.concertgebouw.nl/'
+    url = 'https://www.' + 'concert' + 'gebouw' + '.nl/'
     cache_filename = f'cache/{date.today()}.html'
     if not os.path.exists(cache_filename):
         for filename in glob.glob('cache/*'):

@@ -112,7 +112,7 @@ names_lookup = {x[0]: x for x in names}
 
 
 conversions_phrase = {
-    'concertgebouw': 'kroketgebouw',
+    'concert' + 'gebouw': 'kroketgebouw',
     'fonds': 'fooienpot',
     'klinkt': 'smaakt',
     'mooier': 'beter',
