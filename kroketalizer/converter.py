@@ -135,6 +135,8 @@ conversions_phrase = {
     'evenement': 'partijtje',
     'concert of evenement': 'kinderpartijtje',
     'Collegium Vocale Gent': 'collegium friture',
+    'viotta': 'viandel',
+    'lier': 'bier',
 }
 
 

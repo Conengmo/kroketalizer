@@ -41,8 +41,6 @@ def get_content(body: bytes) -> dict:
     for block in r.css('a[data-component="Cardoverview"]'):
         header = block.css('h4::text').get().strip()
         texts = block.css('h5::text').get().strip()
-        if 'restaurant' in header.lower() or 'café' in header.lower():
-            continue
         if header and texts:
             convert_bottom.append((header, texts, images.pop()))
     context['content_bottom'] = convert_bottom
