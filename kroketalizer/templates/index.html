@@ -4,25 +4,6 @@
 
 {% block style %}
   <style>
-      .media-button {
-          position:relative;
-          float: right;
-          opacity: 0.5;
-      }
-      .media-button:hover {
-          opacity: 1;
-      }
-      .sound-button img {
-          width: 33px;
-          height: 33px;
-      }
-      .video-button img {
-          width: 25px;
-          height: 25px;
-          margin-top: 4px;
-          margin-left:  10px;
-      }
-
       .jumbotron-wrapper {
           position: absolute;
           top: 70px;
@@ -31,35 +12,19 @@
           background: linear-gradient(to right, #9f4f4f, #665201);
           clip-path: circle(1500px at 42% -620px);
       }
-      #jumbotronVideo {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          opacity: 0.8;
-      }
       .jumbotron-text {
           position: relative;
           color: white;
           font-family: open-sans, sans-serif;
       }
-
-      @media only screen and (max-width: 760px) {
-          .jumbotron-wrapper {
-              background-color: black;
-          }
-          #jumbotronVideo {
-              display: none;
-          }
-          .jumbotron-video-replacement {
-              height: 100%;
-              background-image: url('/static/img/pexels-cottonbro-4253305.jpg');
-              background-size: contain;
-              opacity: 0.75;
-          }
-          .media-button {
-              display: none;
-          }
+      .jumbotron-video-replacement {
+          width: 100%;
+          height: 100%;
+          background-image: url('/static/img/wrapper_background.jpg');
+          background-size: cover;
+          opacity: 0.8;
       }
+
       .selection-pills span {
           background: white;
           border: 1px #b2394b solid;
@@ -80,7 +45,6 @@
 {% block content %}
 
   <div class="jumbotron-wrapper">
-    <video id="jumbotronVideo" muted preload="none" src="/static/video/{{ videos.0 }}"></video>
     <div class="jumbotron-video-replacement"></div>
   </div>
 
@@ -90,7 +54,7 @@
 
     <div class="jumbotron-text">
       <div class="row py-4" style="margin-bottom:7rem;">
-        <div class="col-lg-4 col-md-2">
+        <div class="col-lg-5 col-md-2">
           <div style="border-bottom: 3px white solid; display:flex; padding-bottom:20px; margin-bottom:25px;">
             <img src="{{ url_for('static', filename='icons/hamburger.svg') }}" width="120px" height="120px"
                  alt="hamburger icon" style="filter:invert(1); align-self:center;">
@@ -98,21 +62,7 @@
               HET<br/>KROKET<br/>GEBOUW
             </div>
           </div>
-          <h2 class="fs-3 fw-bold" style="">Samen smaakt alles beter</h2>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <span id="playButton" class="media-button video-button">
-          <img src="{{ url_for('static', filename='icons/play.svg') }}" alt="play video"></span>
-          <span id="pauseButton" class="media-button video-button" style="display:none">
-          <img src="{{ url_for('static', filename='icons/pause.svg') }}" alt="pause video"></span>
-
-          <span id="muteButton" class="media-button sound-button" style="display:none">
-          <img src="{{ url_for('static', filename='icons/mute.svg') }}" alt="mute"></span>
-          <span id="unmuteButton" class="media-button sound-button">
-          <img src="{{ url_for('static', filename='icons/speaker.svg') }}" alt="unmute"></span>
+          <h2 class="fs-3 fw-bold" style="">Allemaaltijd in Het Kroketgebouw</h2>
         </div>
       </div>
 
@@ -219,72 +169,3 @@
   </div>
 
 {% endblock %}
-
-
-{% block script %}
-
-  <script>
-
-  document.addEventListener("DOMContentLoaded", function(event) {
-
-      const videoElement = document.getElementById("jumbotronVideo");
-
-      if (getComputedStyle(videoElement).getPropertyValue('display') !== 'none') {
-          videoElement.play();
-
-          videoElement.addEventListener('ended', function () {
-              let current = videoElement.getAttribute('src');
-              let options = [
-                  {% for video_file in videos %}
-                      '/static/video/{{ video_file }}',
-                  {% endfor %}
-              ];
-              options = options.filter(function (value) {
-                  return value !== current
-              });
-              let pick = options[Math.floor(Math.random() * options.length)];
-              videoElement.setAttribute("src", pick);
-              videoElement.play();
-          });
-
-          const music = new Audio("{{ url_for('static', filename='/audio/carl_filtsch_romance_op_3_no_1.mp3') }}");
-          music.muted = true;
-          music.loop = true;
-          music.play();
-
-          videoElement.onplay = function () {
-              document.getElementById('playButton').style.display = 'none';
-              document.getElementById('pauseButton').style.display = 'inherit';
-          }
-          videoElement.onpause = function () {
-              document.getElementById('playButton').style.display = 'inherit';
-              document.getElementById('pauseButton').style.display = 'none';
-          }
-
-          document.getElementById('playButton').onclick = function () {
-              music.play();
-              videoElement.play();
-          }
-          document.getElementById('pauseButton').onclick = function () {
-              music.pause();
-              videoElement.pause();
-          }
-
-          document.getElementById('muteButton').onclick = function () {
-              music.muted = true;
-              document.getElementById('muteButton').style.display = 'none';
-              document.getElementById('unmuteButton').style.display = 'inherit';
-          }
-          document.getElementById('unmuteButton').onclick = function () {
-              music.muted = false;
-              document.getElementById('muteButton').style.display = 'inherit';
-              document.getElementById('unmuteButton').style.display = 'none';
-          }
-
-      }  // end check not on mobile
-
-  });
-
-  </script>
-
-{% endblock script %}

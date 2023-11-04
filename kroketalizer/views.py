@@ -17,9 +17,6 @@ def index():
 
     context = convert(context)
 
-    context['videos'] = [fn for fn in os.listdir('kroketalizer/static/video/') if fn.endswith('.mp4')]
-    random.shuffle(context['videos'])
-
     context['snacks'] = map(str.lower, sorted(random.sample(names, k=16)))
 
     return render_template('index.html', **context)
