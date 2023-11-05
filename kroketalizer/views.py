@@ -17,8 +17,6 @@ def index():
 
     context = convert(context)
 
-    context['snacks'] = map(str.lower, sorted(random.sample(names, k=16)))
-
     return render_template('index.html', **context)
 
 

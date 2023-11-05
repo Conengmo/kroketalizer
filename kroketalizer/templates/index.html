@@ -25,6 +25,13 @@
           opacity: 0.8;
       }
 
+      .keuzehulp-card {
+          background: white;
+          border-radius: 1.5rem;
+          padding: 3rem;
+          height: 350px;
+      }
+
       .selection-pills span {
           background: white;
           border: 1px #b2394b solid;
@@ -68,14 +75,15 @@
 
     </div>
 
-    <div class="row px-lg-4" style="position:relative; margin-top:1rem; margin-bottom:5rem; background:white; border-radius:1.5rem;">
-      <div class="col" style="padding: 3rem; height:350px;">
-        <h2 class="title-red mb-3">Kies een kroket</h2>
-        <h6>Waar heb je trek in?</h6>
-        <div class="selection-pills  mt-3">
-          {% for snack in snacks %}
-            <span class="badge rounded-pill shadow-sm mb-3 me-1">{{ snack }}</span>
-          {% endfor %}
+    <div class="row px-lg-4 gx-5" style="position:relative; margin-top:1rem; margin-bottom:5rem;">
+      <div class="col" style="padding-left:0">
+        <div class="keuzehulp-card">
+          <h2 class="title-red mb-3">Zoekt u iets specifieks?</h2>
+        </div>
+      </div>
+      <div class="col" style="padding-right:0">
+        <div class="keuzehulp-card">
+          <h2 class="title-red mb-3">Wij helpen u kiezen</h2>
         </div>
       </div>
     </div>
