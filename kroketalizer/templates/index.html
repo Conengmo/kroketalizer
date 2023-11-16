@@ -25,17 +25,51 @@
           opacity: 0.8;
       }
 
-      .selection-pills span {
+      .keuzehulp-card {
           background: white;
-          border: 1px #b2394b solid;
-          color: #b2394b;
-          padding: 0.5rem 1rem;
-          font-size: 0.9rem;
-          font-family: open-sans, sans-serif;
+          border-radius: 1.5rem;
+          padding: 2rem 3rem 2.5rem;
       }
-      .selection-pills span:hover {
+
+      .chat-container {
+          overflow: hidden;
+      }
+      .chat {
+          display: flex;
+          flex-direction: column;
+      }
+      .chat-bubble {
+          margin: 5px;
+          padding: 10px;
+          border-radius: 10px;
+      }
+      .bot-bubble {
+          background-color: #e1f5fe;
+          align-self: flex-start;
+      }
+      .user-bubble {
+          background-color: #4caf50;
           color: white;
-          background-color: #b2394b;
+          align-self: flex-end;
+      }
+      .chat-container .input-container {
+          display: flex;
+          padding: 10px;
+          border-top: 1px solid #ccc;
+      }
+      .chat-container button {
+          padding: 10px 20px;
+          margin-left: 10px;
+      }
+      /* Override Bootstrap's default focus styles */
+      .no-outline:focus {
+        outline: none !important;
+        box-shadow: none !important;
+      }
+
+      .btn-keuzehulp {
+        width: 100%;
+        border-radius: 1rem;
       }
 
   </style>
@@ -68,14 +102,27 @@
 
     </div>
 
-    <div class="row px-lg-4" style="position:relative; margin-top:1rem; margin-bottom:5rem; background:white; border-radius:1.5rem;">
-      <div class="col" style="padding: 3rem; height:350px;">
-        <h2 class="title-red mb-3">Kies een kroket</h2>
-        <h6>Waar heb je trek in?</h6>
-        <div class="selection-pills  mt-3">
-          {% for snack in snacks %}
-            <span class="badge rounded-pill shadow-sm mb-3 me-1">{{ snack }}</span>
-          {% endfor %}
+    <div class="row px-lg-4 gx-5" style="position:relative; margin-top:1rem; margin-bottom:5rem;">
+      <div class="col" style="padding-left:0">
+        <div class="keuzehulp-card">
+          <h2 class="title-red mb-3">Zoekt u iets specifieks?</h2>
+
+          <div class="chat-container">
+            <div class="chat"></div>
+            <div class="input-group mt-3">
+                <input type="text" id="user-input" class="form-control no-outline">
+                <button id="send-button" class="btn btn-secondary">Verstuur</button>
+            </div>
+        </div>
+
+        </div>
+      </div>
+      <div class="col" style="padding-right:0">
+        <div class="keuzehulp-card">
+          <h2 class="title-red mb-3">Wij helpen u kiezen</h2>
+          <button id="startKeuzehulp" type="button" class="btn btn-danger btn-keuzehulp mt-3">
+            <b>Start keuzehulp</b>
+          </button>
         </div>
       </div>
     </div>
@@ -169,3 +216,107 @@
   </div>
 
 {% endblock %}
+
+
+{% block script %}
+
+  <script>
+
+      const chatContainer = document.querySelector('.chat');
+      const userInput = document.getElementById('user-input');
+      const sendButton = document.getElementById('send-button');
+
+      function addUserBubble(userMessage) {
+          const userBubble = document.createElement('div');
+          userBubble.classList.add('chat-bubble', 'user-bubble');
+          userBubble.textContent = userMessage;
+          chatContainer.appendChild(userBubble);
+          removeExcessBubbles();
+      }
+
+      function sendUserMessage() {
+          const userMessage = userInput.value.trim();
+
+          let messageHistory = [];
+
+          if (userMessage.trim() !== '') {
+              addUserBubble(userMessage);
+              userInput.value = '';
+
+              const bubbles = chatContainer.getElementsByClassName('chat-bubble');
+              for (let i = 0; i < bubbles.length; i++) {
+                  let element = bubbles[i];
+                  messageHistory.push({
+                      role: element.className.includes("user-bubble") ? "user" : "assistant",
+                      content: element.innerHTML
+                  });
+              }
+
+              sendMessage(messageHistory);
+          }
+      }
+
+      function sendMessage(messageHistory) {
+          const messageData = {
+              messageHistory: messageHistory,
+          };
+
+          const botBubble = document.createElement('div');
+          botBubble.classList.add('chat-bubble', 'bot-bubble');
+          botBubble.textContent = "";
+          chatContainer.appendChild(botBubble);
+          removeExcessBubbles();
+
+          fetch('/chat', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(messageData),
+          })
+          .then((response) => {
+              const reader = response.body.getReader();
+              return new ReadableStream({
+                  start(controller) {
+                      function push() {
+                          reader.read().then(({done, value}) => {
+                              if (done) {
+                                  controller.close();
+                                  return;
+                              }
+                              controller.enqueue(value);
+                              botBubble.textContent += new TextDecoder().decode(value);
+                              push();
+                          });
+                      }
+                      push();
+                  }
+              });
+          })
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+      }
+
+      sendButton.addEventListener('click', sendUserMessage);
+      userInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+              sendUserMessage();
+          }
+      });
+
+      // Remove older bubbles when more than two bubbles are present
+      function removeExcessBubbles() {
+          const bubbles = chatContainer.getElementsByClassName('chat-bubble');
+          if (bubbles.length > 2) {
+              chatContainer.removeChild(bubbles[0]);
+          }
+      }
+
+      document.getElementById("startKeuzehulp").onclick = function() {
+        sendMessage([]);
+      };
+
+  </script>
+
+{% endblock script %}

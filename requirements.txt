@@ -1,3 +1,5 @@
 requests
 scrapy
 flask
+python-dotenv
+openai
