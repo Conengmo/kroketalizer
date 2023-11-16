@@ -54,8 +54,6 @@ def iter_chat_response():
             "bij die gebruiker past. "
         )
 
-    print(prompt)
-
     api_key = dotenv_values()['OPENAI_API_KEY']
     client = OpenAI(api_key=api_key)
     response = client.chat.completions.create(
